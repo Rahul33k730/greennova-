@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title">
+  <title id="title">Environmental engineering illustration</title>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0E664B" />
+      <stop offset="100%" stop-color="#80D5A0" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" rx="48" fill="#E8F9ED" />
+  <path d="M320 280h480v360H320z" fill="url(#g1)" stroke="#11654C" stroke-width="24" rx="42" />
+  <path d="M920 320h360v320H920z" fill="#C8F1D5" stroke="#11654C" stroke-width="22" rx="42" />
+  <path d="M420 620h260v120h-260z" fill="#fff" fill-opacity="0.85" />
+  <path d="M430 650h220" stroke="#11654C" stroke-width="26" stroke-linecap="round" />
+  <circle cx="1120" cy="540" r="72" fill="#fff" fill-opacity="0.8" />
+  <path d="M1120 470v86" stroke="#11654C" stroke-width="28" stroke-linecap="round" />
+  <path d="M1040 610h160" stroke="#11654C" stroke-width="22" stroke-linecap="round" />
+  <path d="M310 260c82-44 184-53 286-25 90 25 168 88 220 168" stroke="#1F7E5F" stroke-width="28" fill="none" stroke-linecap="round" />
+  <text x="230" y="880" font-family="Inter, sans-serif" font-size="64" font-weight="700" fill="#1A5B45">Environmental Engineering</text>
+</svg>

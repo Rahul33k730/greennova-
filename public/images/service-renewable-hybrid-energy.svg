@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title">
+  <title id="title">Renewable hybrid energy illustration</title>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E9D8E" />
+      <stop offset="100%" stop-color="#85E0C9" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" rx="48" fill="#E9F8F2" />
+  <path d="M300 320h420v460H300z" fill="url(#g1)" stroke="#157A67" stroke-width="24" rx="42" />
+  <path d="M880 340h380v300H880z" fill="#C6F0E0" stroke="#157A67" stroke-width="22" rx="42" />
+  <path d="M360 420h340v180H360z" fill="#fff" fill-opacity="0.7" />
+  <path d="M390 520h280" stroke="#157A67" stroke-width="26" stroke-linecap="round" />
+  <path d="M920 390h140l40 80-40 80h-140z" fill="#fff" stroke="#157A67" stroke-width="22" />
+  <path d="M985 390v160" stroke="#157A67" stroke-width="24" stroke-linecap="round" />
+  <path d="M880 680h360" stroke="#157A67" stroke-width="22" stroke-linecap="round" />
+  <circle cx="500" cy="720" r="80" fill="#fff" fill-opacity="0.75" />
+  <text x="230" y="880" font-family="Inter, sans-serif" font-size="64" font-weight="700" fill="#145D4D">Renewable Hybrid Energy</text>
+</svg>

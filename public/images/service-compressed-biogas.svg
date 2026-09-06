@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title">
+  <title id="title">Compressed biogas illustration</title>
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2E6B4E" />
+      <stop offset="100%" stop-color="#90E0B7" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" rx="48" fill="#E8F8F1" />
+  <path d="M530 250h260v420h-260z" fill="url(#g1)" stroke="#1D5B46" stroke-width="22" rx="40" />
+  <circle cx="620" cy="420" r="78" fill="#fff" fill-opacity="0.8" />
+  <circle cx="620" cy="420" r="42" fill="#1D5B46" />
+  <path d="M620 510v160" stroke="#1D5B46" stroke-width="26" stroke-linecap="round" />
+  <path d="M620 282c0-84 87-112 187-112s187 28 187 112v242c0 84-87 112-187 112s-187-28-187-112V282Z" fill="#C8F2D8" />
+  <path d="M620 282c0-84 87-112 187-112s187 28 187 112v242c0 84-87 112-187 112s-187-28-187-112V282Z" stroke="#1D5B46" stroke-width="22" />
+  <rect x="1000" y="250" width="380" height="240" rx="34" fill="#fff" fill-opacity="0.8" />
+  <path d="M1110 340h160M1110 420h120M1110 500h100" stroke="#1D5B46" stroke-width="26" stroke-linecap="round" />
+  <text x="230" y="860" font-family="Inter, sans-serif" font-size="72" font-weight="700" fill="#214D33">Compressed Biogas</text>
+</svg>

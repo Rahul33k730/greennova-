@@ -1,0 +1,191 @@
+import { useEffect, useRef, useState } from 'react';
+import Button from '@/components/primitives/Button';
+import { HERO } from '@/data/site';
+
+/**
+ * HeroBlock — Cinematic full-viewport hero with animated 6-image slideshow
+ * -------------------------------------------------------------------------
+ * Features:
+ *  - Cross-fade transitions between all 6 client-provided images
+ *  - Ken Burns (subtle zoom + pan) effect on active slide
+ *  - Auto-advance every 6s with pause-on-hover
+ *  - Navigation dots at bottom for manual slide selection
+ *  - Respect `prefers-reduced-motion` user preference
+ *  - Gradient overlays preserved for text legibility
+ */
+export default function HeroBlock() {
+  const [h1, h2, h3] = HERO.headline;
+  const slides = HERO.slides;
+  const interval = HERO.slideshowInterval;
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mql.matches);
+    const onChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else mql.addListener(onChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener('change', onChange);
+      else mql.removeListener(onChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion || isPaused) return;
+    timerRef.current = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % slides.length);
+    }, interval);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [reducedMotion, isPaused, slides.length, interval]);
+
+  useEffect(() => {
+    slides.forEach((slide) => {
+      const img = new Image();
+      img.src = slide.src;
+    });
+  }, [slides]);
+
+  const goTo = (idx: number) => {
+    setActiveIndex(((idx % slides.length) + slides.length) % slides.length);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = setInterval(() => {
+        setActiveIndex((i) => (i + 1) % slides.length);
+      }, interval);
+    }
+  };
+
+  return (
+    <section
+      id="top"
+      aria-labelledby="hero-heading"
+      className="relative isolate min-h-[100svh] w-full overflow-hidden flex items-end lg:items-center pt-[var(--nav-height)] lg:pt-[calc(var(--nav-height)+2rem)] pb-section-lg"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
+    >
+      {/* ── Animated slideshow background ── */}
+      <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden>
+        {slides.map((slide, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <div
+              key={slide.src}
+              className={`absolute inset-0 hero-slide ${isActive ? 'hero-slide--active' : ''}`}
+              data-slide-index={idx}
+            >
+              <img
+                src={slide.src}
+                alt={slide.alt}
+                role="presentation"
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchPriority={idx === 0 ? 'high' : 'auto'}
+                className={`h-full w-full object-cover ${isActive ? 'hero-slide__kenburns' : ''}`}
+                style={{ objectPosition: 'center center' }}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Gradient overlays for legibility ── */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-950/90 via-forest-950/60 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/80 via-transparent to-forest-950/40"
+      />
+
+      {/* ── Content ── */}
+      <div className="ds-container relative w-full">
+        <div className="max-w-3xl xl:max-w-4xl reveal-up">
+          {/* Eyebrow badge */}
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-nova-400/30 bg-forest-950/60 px-4 py-1.5 backdrop-blur-md text-[0.72rem] font-bold uppercase tracking-[0.16em] text-nova-300 shadow-sm">
+            <span className="h-2 w-2 rounded-full bg-nova-400 shadow-[0_0_8px_rgba(0,214,133,0.9)] pulse-indicator" />
+            {HERO.eyebrow}
+          </span>
+
+          {/* Headline */}
+          <h1
+            id="hero-heading"
+            className="mt-6 font-display font-semibold leading-[1.02] tracking-[-0.035em] text-white text-balance text-[clamp(2.5rem,5vw+0.5rem,5.5rem)]"
+            style={{ textShadow: '0 10px 32px rgba(4, 19, 13, 0.5)' }}
+          >
+            {h1}
+            <br />
+            <span className="bg-gradient-to-r from-nova-300 via-nova-400 to-gold-300 bg-clip-text text-transparent">{h2}</span>
+            <br />
+            {h3}
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            className="mt-7 max-w-2xl text-[1.08rem] leading-[1.8] text-white/90 sm:text-[1.12rem]"
+            style={{ textShadow: '0 6px 22px rgba(10, 30, 21, 0.34)' }}
+          >
+            {HERO.subtitle}
+          </p>
+
+          {/* CTAs */}
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Button
+              as="a"
+              href={HERO.primaryCta.href}
+              variant="accent"
+              size="lg"
+              iconRight="arrow-right"
+            >
+              {HERO.primaryCta.label}
+            </Button>
+            <Button
+              as="a"
+              href={HERO.secondaryCta.href}
+              variant="ghost"
+              size="lg"
+              inverted
+              iconRight="arrow-right"
+            >
+              {HERO.secondaryCta.label}
+            </Button>
+          </div>
+        </div>
+
+        {/* ── Slideshow navigation dots ── */}
+        <div className="mt-16 lg:mt-24 flex items-center gap-3" role="tablist" aria-label="Hero background slides">
+          {slides.map((slide, idx) => (
+            <button
+              key={slide.src + '-dot'}
+              role="tab"
+              aria-selected={idx === activeIndex}
+              aria-label={`Go to slide ${idx + 1} of ${slides.length}`}
+              onClick={() => goTo(idx)}
+              className={`group relative h-2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                idx === activeIndex
+                  ? 'w-10 bg-nova-400 shadow-[0_0_14px_rgba(74,208,142,0.6)]'
+                  : 'w-2 bg-white/30 hover:bg-white/50'
+              }`}
+            >
+              {idx === activeIndex && (
+                <span className="absolute inset-0 rounded-full hero-dot-progress" />
+              )}
+            </button>
+          ))}
+          <span className="ml-3 text-[0.7rem] uppercase tracking-[0.22em] font-semibold text-white/60">
+            {String(activeIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
