@@ -66,7 +66,7 @@ export default function HeroBlock() {
     <section
       id="top"
       aria-labelledby="hero-heading"
-      className="relative isolate min-h-[100svh] w-full overflow-hidden flex items-end lg:items-center pt-[var(--nav-height)] lg:pt-[calc(var(--nav-height)+2rem)] pb-[max(3rem,env(safe-area-inset-bottom))] sm:pb-20 lg:pb-24"
+      className="relative isolate min-h-[100svh] w-full overflow-hidden flex items-center sm:items-end lg:items-center pt-[calc(var(--nav-height)+1.5rem)] pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:pb-20 lg:pt-[calc(var(--nav-height)+2rem)] lg:pb-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -99,44 +99,44 @@ export default function HeroBlock() {
       {/* ── Gradient overlays for legibility ── */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/90 via-forest-950/30 to-forest-950/50 lg:bg-gradient-to-r lg:from-forest-950/90 lg:via-forest-950/60 lg:to-transparent"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/80 via-forest-950/45 to-forest-950/55 lg:bg-gradient-to-r lg:from-forest-950/90 lg:via-forest-950/60 lg:to-transparent"
       />
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/85 via-transparent to-forest-950/40 lg:from-forest-950/60"
+        className="absolute inset-0 -z-10 bg-forest-950/30 lg:bg-gradient-to-t lg:from-forest-950/60 lg:via-transparent lg:to-forest-950/40"
       />
 
       {/* ── Content ── */}
       <div className="ds-container relative w-full">
-        <div className="max-w-3xl xl:max-w-4xl reveal-up">
+        <div className="max-w-2xl sm:max-w-3xl xl:max-w-4xl reveal-up">
           {/* Eyebrow badge */}
-          <span className="inline-flex items-center rounded-full border border-nova-400/30 bg-forest-950/60 px-3.5 py-1.5 sm:px-4 backdrop-blur-md text-[0.65rem] sm:text-[0.72rem] font-bold uppercase tracking-[0.1em] sm:tracking-[0.16em] text-nova-300 shadow-sm">
+          <span className="inline-flex items-center rounded-full border border-nova-400/30 bg-forest-950/60 px-3 py-1.5 sm:px-4 backdrop-blur-md text-[0.62rem] sm:text-[0.72rem] font-bold uppercase tracking-[0.1em] sm:tracking-[0.16em] text-nova-300 shadow-sm">
             {HERO.eyebrow}
           </span>
 
           {/* Headline */}
           <h1
             id="hero-heading"
-            className="mt-5 sm:mt-6 font-display font-semibold leading-[1.05] sm:leading-[1.02] tracking-[-0.03em] sm:tracking-[-0.035em] text-white text-balance text-[clamp(2rem,6vw+0.25rem,5.5rem)]"
+            className="mt-4 sm:mt-6 font-display font-semibold leading-[1.08] sm:leading-[1.02] tracking-[-0.02em] sm:tracking-[-0.035em] text-white text-balance text-[clamp(1.75rem,7.2vw,3rem)] sm:text-[clamp(2rem,6vw+0.25rem,5.5rem)]"
             style={{ textShadow: '0 10px 32px rgba(4, 19, 13, 0.5)' }}
           >
             {h1}
-            <br />
+            <br className="hidden sm:block" />
             <span className="bg-gradient-to-r from-nova-300 via-nova-400 to-gold-300 bg-clip-text text-transparent">{h2}</span>
-            <br />
+            <br className="hidden sm:block" />
             {h3}
           </h1>
 
           {/* Subtitle */}
           <p
-            className="mt-5 sm:mt-7 max-w-2xl text-[0.98rem] sm:text-[1.12rem] leading-[1.75] sm:leading-[1.8] text-white/90"
+            className="mt-4 sm:mt-7 max-w-xl sm:max-w-2xl text-[0.92rem] sm:text-[1.12rem] leading-[1.65] sm:leading-[1.8] text-white/90"
             style={{ textShadow: '0 6px 22px rgba(10, 30, 21, 0.34)' }}
           >
             {HERO.subtitle}
           </p>
 
           {/* CTAs */}
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+          <div className="mt-7 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
             <Button
               as="a"
               href={HERO.primaryCta.href}
@@ -162,7 +162,7 @@ export default function HeroBlock() {
         </div>
 
         {/* ── Slideshow navigation dots ── */}
-        <div className="mt-10 sm:mt-16 lg:mt-24 flex items-center gap-2.5 sm:gap-3" role="tablist" aria-label="Hero background slides">
+        <div className="mt-8 sm:mt-16 lg:mt-24 flex items-center gap-2.5 sm:gap-3" role="tablist" aria-label="Hero background slides">
           {slides.map((slide, idx) => (
             <button
               key={slide.src + '-dot'}

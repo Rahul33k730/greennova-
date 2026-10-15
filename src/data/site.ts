@@ -28,7 +28,7 @@ export const COMPANY = {
   ],
   registeredOffice: 'H.NO. 3621 Dhore Wada, Vadgaon Mawal, Pune 412106',
   hq: 'H.NO. 3621 Dhore Wada, Vadgaon Mawal, Pune 412106',
-  email: 'greennovaenergyandenvironment@gmail.com',
+  email: 'info@greennovasolution.co',
   phone: '+91 8550983678',
   phoneSecondary: '+91 7276817964',
   phones: ['+91 8550983678', '+91 7276817964'] as const,
@@ -535,7 +535,7 @@ export const CTA = {
     'Speak to our team early — from concept stage onwards. We help our clients scope projects correctly, select the right technology, and deliver them to institutional standards.',
   primary: { label: 'Start a conversation', href: WHATSAPP_HREF },
   secondary: { label: 'Download capability note', href: '#' },
-  highlight: 'greennovaenergyandenvironment@gmail.com',
+  highlight: 'info@greennovasolution.co',
 };
 
 /* ===========================================================
