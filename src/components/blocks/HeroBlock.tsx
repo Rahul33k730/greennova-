@@ -73,7 +73,7 @@ export default function HeroBlock() {
       onBlur={() => setIsPaused(false)}
     >
       {/* ── Animated slideshow background ── */}
-      <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden>
+      <div className="absolute inset-0 -z-20 overflow-hidden bg-forest-950" aria-hidden>
         {slides.map((slide, idx) => {
           const isActive = idx === activeIndex;
           return (
@@ -89,7 +89,7 @@ export default function HeroBlock() {
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 fetchPriority={idx === 0 ? 'high' : 'auto'}
-                className={`h-full w-full object-cover object-center lg:object-center ${isActive ? 'hero-slide__kenburns' : ''}`}
+                className={`h-full w-full object-contain sm:object-cover object-center ${isActive ? 'hero-slide__kenburns' : ''}`}
               />
             </div>
           );
