@@ -378,9 +378,8 @@ export default function ESGPage() {
             ].map((t) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[0.72rem] font-medium tracking-wide text-white/70"
+                className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[0.72rem] font-medium tracking-wide text-white/70"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-nova-400" />
                 {t}
               </span>
             ))}

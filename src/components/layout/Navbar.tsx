@@ -219,7 +219,7 @@ export default function Navbar({
         <button
           type="button"
           className={[
-            'ds-btn ds-btn--icon ds-btn--ghost lg:hidden',
+            'ds-btn ds-btn--icon ds-btn--ghost lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2.5 touch-manipulation',
             translucent ? 'border-white/20 text-white hover:bg-white/10' : '',
           ].join(' ')}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -227,21 +227,32 @@ export default function Navbar({
           aria-controls="mobile-menu-panel"
           onClick={() => setMenuOpen((v) => !v)}
         >
-          <Icon name={menuOpen ? 'close' : 'menu'} size={20} />
+          <Icon name={menuOpen ? 'close' : 'menu'} size={22} />
         </button>
       </div>
+
+      {/* Mobile backdrop overlay */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 top-[var(--nav-height)] bg-forest-950/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+          aria-hidden="true"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
 
       {/* Mobile menu panel */}
       <div
         id="mobile-menu-panel"
         className={[
-          'lg:hidden ds-container pb-6 bg-paper/98 backdrop-blur-xl border-t border-line transition-[opacity,max-height,transform] duration-300 ease-corp overflow-hidden',
-          menuOpen ? 'opacity-100 max-h-[80vh] translate-y-0' : 'opacity-0 max-h-0 -translate-y-1 pointer-events-none',
+          'lg:hidden fixed inset-x-0 top-[var(--nav-height)] ds-container pb-[max(2rem,env(safe-area-inset-bottom))] bg-white dark:bg-[#0A1E15] border-b border-line shadow-2xl overflow-y-auto overscroll-contain transition-all duration-300 ease-corp z-50',
+          menuOpen
+            ? 'opacity-100 max-h-[calc(100svh-var(--nav-height))] translate-y-0 pointer-events-auto block'
+            : 'opacity-0 max-h-0 -translate-y-2 pointer-events-none hidden',
         ].join(' ')}
         aria-hidden={!menuOpen}
       >
         <nav aria-label="Mobile primary">
-          <ul className="flex flex-col gap-1 pt-5">
+          <ul className="flex flex-col gap-1 pt-4">
             {NAV_LINKS.map((l) => (
               <li key={l.href}>
                 <NavLink
@@ -250,7 +261,7 @@ export default function Navbar({
                   onClick={() => setMenuOpen(false)}
                   className={({ isActive }) =>
                     [
-                      'block rounded-md px-3 py-3 text-[1rem] font-medium transition-colors',
+                      'block rounded-xl px-3.5 py-3 text-[1rem] font-medium transition-colors touch-manipulation',
                       isActive
                         ? 'bg-nova-50 text-forest-800 font-semibold'
                         : 'text-ink-light hover:bg-paper-grey hover:text-ink',
@@ -260,7 +271,7 @@ export default function Navbar({
                   {l.label}
                 </NavLink>
                 {l.children && (
-                  <ul className="mt-1 ml-4 pl-3 border-l border-line flex flex-col gap-1 pb-1" aria-label={`${l.label} submenu`}>
+                  <ul className="mt-1 ml-4 pl-3.5 border-l-2 border-forest-100 flex flex-col gap-1 pb-1" aria-label={`${l.label} submenu`}>
                     {l.children.map((c) => (
                       <li key={c.href}>
                         <NavLink
@@ -268,7 +279,7 @@ export default function Navbar({
                           onClick={() => setMenuOpen(false)}
                           className={({ isActive }) =>
                             [
-                              'block rounded-md px-3 py-2 text-[0.9rem] transition-colors',
+                              'block rounded-lg px-3 py-2.5 text-[0.92rem] transition-colors touch-manipulation',
                               isActive
                                 ? 'bg-nova-50 text-forest-800 font-semibold'
                                 : 'text-ink-muted hover:bg-paper-grey hover:text-ink',
@@ -285,12 +296,13 @@ export default function Navbar({
             ))}
           </ul>
           {showCTA && (
-            <div className="mt-5">
+            <div className="mt-6 pt-4 border-t border-line">
               <Button
                 as="a"
                 href={contactHref}
                 variant="primary"
                 fullWidth
+                size="lg"
                 iconRight="arrow-right"
                 onClick={() => setMenuOpen(false)}
               >

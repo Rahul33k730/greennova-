@@ -72,8 +72,7 @@ export default function ServicesIndexPage() {
                       </div>
                     )}
                     <div className="p-6 md:p-7">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="w-1.5 h-1.5 rounded-full bg-nova-500" />
+                      <div className="flex items-center mb-3">
                         <span className="text-[0.72rem] font-semibold uppercase tracking-wider text-forest-700">
                           {svc.footer}
                         </span>

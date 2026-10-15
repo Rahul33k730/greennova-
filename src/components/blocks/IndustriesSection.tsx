@@ -1,7 +1,5 @@
-import Icon from '@/components/primitives/Icon';
 import { SectionHeader } from '@/components/section/Section';
 import { INDUSTRIES } from '@/data/site';
-import type { IconName } from '@/types/design-system';
 
 /**
  * Industries We Serve — photo-rich corporate sector cards
@@ -36,11 +34,6 @@ export default function IndustriesSection() {
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-950 via-forest-950/30 to-transparent" />
-
-                {/* Sector Icon badge */}
-                <div className="absolute top-3 left-3 h-8 w-8 rounded-lg bg-forest-950/70 border border-white/20 backdrop-blur-md flex items-center justify-center text-nova-300 shadow-sm">
-                  <Icon name={ind.icon as IconName} size={16} />
-                </div>
               </div>
 
               {/* Card content */}

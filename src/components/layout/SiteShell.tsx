@@ -21,7 +21,7 @@ export default function SiteShell({ transparentNav = false, children, enableReve
   });
 
   return (
-    <div id="top" className="bg-paper text-ink min-h-screen antialiased" ref={ref}>
+    <div id="top" className="bg-paper text-ink min-h-screen antialiased overflow-x-hidden" ref={ref}>
       {/* A11y skip-to-main */}
       <a href="#main-content" className="ds-skip-link sr-only-focusable">
         Skip to main content

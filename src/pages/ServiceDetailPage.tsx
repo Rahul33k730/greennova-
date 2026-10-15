@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom';
 import SiteShell from '@/components/layout/SiteShell';
 import { SectionHeader } from '@/components/section/Section';
-import {
-  FAQBlock,
-  ServiceCTA,
-} from '@/components/blocks/PageBuildingBlocks';
 import Icon from '@/components/primitives/Icon';
 import type { ServiceDetailData } from '@/data/services-data';
 import { WHATSAPP_HREF } from '@/data/site';
@@ -68,11 +64,6 @@ export default function ServiceDetailPage({ service }: { service: ServiceDetailD
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left: Headline & copy */}
             <div className="lg:col-span-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-forest-800/15 bg-forest-900/5 text-forest-800 text-[0.72rem] font-bold uppercase tracking-[0.15em] mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-nova-500 shadow-[0_0_8px_rgba(0,214,133,0.8)]" />
-                <span>Practice Area • {service.shortTitle}</span>
-              </div>
-
               <h1 className="font-display text-[clamp(2.1rem,3.2vw+0.7rem,3.4rem)] font-semibold tracking-tight text-forest-950 leading-[1.12] text-balance">
                 {service.title}
               </h1>
@@ -81,10 +72,23 @@ export default function ServiceDetailPage({ service }: { service: ServiceDetailD
                 {service.tagline}
               </p>
 
+              <div className="mt-5 space-y-4 max-w-2xl">
+                <p className="text-[0.96rem] leading-[1.75] text-ink-muted font-normal">
+                  {service.overview.lead}
+                </p>
+                {service.overview.paragraphs[0] && (
+                  <p className="text-[0.96rem] leading-[1.75] text-ink-muted font-normal">
+                    {service.overview.paragraphs[0]}
+                  </p>
+                )}
+              </div>
+
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a
                   href={WHATSAPP_HREF}
-                  className="tactile-btn group inline-flex items-center gap-2 rounded-xl bg-forest-900 hover:bg-forest-800 active:bg-forest-950 text-white font-medium text-[0.94rem] px-6 py-3 shadow-sm hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest-700"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tactile-btn group inline-flex items-center gap-2 rounded-xl bg-forest-900 hover:bg-forest-800 active:bg-forest-950 text-white font-medium text-[0.94rem] px-6 py-3 shadow-sm hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest-700 touch-manipulation"
                 >
                   <span>Discuss this service</span>
                   <Icon name="arrow-right" size={15} className="transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 text-emerald-300" />
@@ -152,11 +156,6 @@ export default function ServiceDetailPage({ service }: { service: ServiceDetailD
                     className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-106"
                   />
                   <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-950 via-forest-950/30 to-transparent pointer-events-none" />
-
-                  {/* Sector Icon badge */}
-                  <div className="absolute top-3 left-3 h-8 w-8 rounded-lg bg-forest-950/75 border border-white/20 backdrop-blur-md flex items-center justify-center text-emerald-300 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110">
-                    <Icon name={ind.icon as any} size={16} />
-                  </div>
                 </div>
 
                 {/* Card content */}
@@ -182,41 +181,6 @@ export default function ServiceDetailPage({ service }: { service: ServiceDetailD
           </div>
         </div>
       </section>
-
-
-      {/* ========== FREQUENTLY ASKED QUESTIONS ========== */}
-      <section
-        id="faq"
-        aria-labelledby="faq-title"
-        className="ds-section bg-paper"
-      >
-        <div className="ds-container">
-          <div className="mb-14 lg:mb-16">
-            <SectionHeader
-              eyebrowVariant="gold"
-              eyebrow="Technical & Commercial Inquiries"
-              title={`Frequently Asked Questions About ${service.shortTitle}.`}
-              subtitle="If your technical or commercial query is not covered below, our practice engineers are available for a dedicated scoping conversation."
-            />
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <FAQBlock items={service.faq} />
-          </div>
-        </div>
-      </section>
-
-      {/* ========== DEDICATED PRACTICE CTA ========== */}
-      {service.cta && (
-        <ServiceCTA
-          headline={service.cta.headline}
-          subcopy={service.cta.subcopy}
-          primaryTo={WHATSAPP_HREF}
-          primaryLabel="Discuss your project"
-          secondaryTo="/services"
-          secondaryLabel="Explore all services"
-        />
-      )}
     </SiteShell>
   );
 }

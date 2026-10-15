@@ -167,55 +167,55 @@ export const ABOUT = {
 export const SERVICES: (ServiceCardData & { footer?: string })[] = [
   {
     icon: 'gas',
-    title: 'Green Hydrogen',
+    title: 'Green Hydrogen Engineering & Systems',
     description:
-      'Alkaline & PEM electrolyser integration, H₂ storage, compression, dispensing and off-take structuring for refineries, steel, ammonia, mobility and industrial off-takers.',
-    footer: 'Electrolysers · Storage · Dispensing',
+      'Engineering solutions for green hydrogen production, storage and dispensing — covering system design, renewable power integration, compression, safety systems and downstream applications across industrial and mobility sectors.',
+    footer: 'Hydrogen Production · Storage · Compression · Dispensing',
     href: '/services/green-hydrogen',
     image: '/images/industries/refinery.jpg',
   },
   {
     icon: 'recycle',
-    title: 'Compressed Biogas',
+    title: 'Compressed Biogas & Bio-CNG Systems',
     description:
-      'Design and execution of CBG / Bio-CNG plants — feedstock strategy, anaerobic digestion, gas upgradation, bottling and injection into city gas distribution networks.',
-    footer: 'CBG · Bio-CNG · SATAT Aligned',
+      'End-to-end CBG solutions covering feedstock assessment, digester design, biogas purification and upgrading, compression and Bio-CNG integration — with organic manure recovery to create value from both gas and digestate.',
+    footer: 'Biogas · Upgrading · Bio-CNG · Digestate',
     href: '/services/compressed-biogas',
     image: '/images/industries/gas.jpg',
   },
   {
     icon: 'energy',
-    title: 'Waste-to-Energy',
+    title: 'Waste-to-Value & Biomass Systems',
     description:
-      'Municipal solid waste, agricultural residue and industrial effluent conversion into heat, power and bio-methane — compliant with MSW Rules and emission norms.',
-    footer: 'MSW · Biomass · RDF',
+      'Integrated waste and biomass solutions covering organic waste processing, composting, RDF, biomass utilisation and resource recovery — converting waste streams into useful products, renewable energy and measurable environmental value.',
+    footer: 'Organic Waste · Biomass · RDF · Resource Recovery',
     href: '/services/waste-to-energy',
     image: '/images/industries/cement.jpg',
   },
   {
     icon: 'factory',
-    title: 'Environmental Engineering',
+    title: 'Environmental Engineering & Compliance',
     description:
-      'EIA studies, air & noise pollution control systems, flue-gas treatment, remediation and environmental compliance reporting for industrial and infrastructure projects.',
-    footer: 'EIA · APCS · Remediation',
+      'Environmental solutions covering air pollution control, effluent treatment, dust suppression, environmental monitoring, remediation and regulatory compliance — from project assessment and approvals through implementation and ongoing reporting.',
+    footer: 'Pollution Control · Water · Remediation · Compliance',
     href: '/services/environmental-engineering',
     image: '/images/industries/steel.jpg',
   },
   {
     icon: 'energy',
-    title: 'Renewable Hybrid Energy',
+    title: 'Renewable & Hybrid Energy Systems',
     description:
-      'Utility-scale Solar, Wind, Solar-Wind-BESS hybrids, open-access and captive power plants — from feasibility modelling and grid study through EPC and performance monitoring.',
-    footer: 'Solar · Wind · BESS · Hybrid',
+      'Solar, wind, battery storage and hybrid energy solutions for captive, open-access and utility applications — covering feasibility, system design, grid studies, project execution and performance monitoring.',
+    footer: 'Solar · Wind · BESS · Hybrid Systems',
     href: '/services/renewable-hybrid-energy',
     image: '/images/industries/power.jpg',
   },
   {
     icon: 'leaf',
-    title: 'Sustainability Advisory',
+    title: 'Sustainability & Decarbonisation Advisory',
     description:
-      'ESG strategy, decarbonisation roadmaps, GHG inventories, net-zero targets, BRSR/SEBI reporting, carbon-market readiness and policy advisory for corporates and project proponents.',
-    footer: 'ESG · Net-Zero · BRSR',
+      'Engineering-backed sustainability solutions covering GHG inventories, ESG strategy, BRSR readiness, decarbonisation roadmaps, carbon-market opportunities and measurable environmental performance improvement.',
+    footer: 'Sustainability & ESG · Carbon · Net-Zero · BRSR',
     href: '/services/sustainability-advisory',
     image: '/images/industries/datacenter.jpg',
   },
@@ -335,11 +335,16 @@ export const VISION_MISSION = {
     eyebrow: 'Our Vision',
     title: 'A Clean-Energy Economy Where Every Project is Built to World-Class Standards.',
     description:
-      'To be the most trusted engineering partner for India\'s clean-energy and environmental infrastructure — raising the baseline on quality, governance and lifecycle performance so that investors, lenders and operators can commit capital with long-term confidence.',
+      'Green Nova is working towards a cleaner and energy-independent India by accelerating the adoption of sustainable energy, resource recovery and environmental technologies.',
+    bullets: [
+      'Set a new benchmark for engineering excellence, where every asset is bankable, auditable and built to outlast its design life.',
+    ],
   },
   mission: {
     eyebrow: 'Our Mission',
     title: 'Deliver Every Asset on the Merit of its Engineering.',
+    description:
+      'To accelerate the transition to a cleaner energy economy by making sustainable technologies easier to adopt and turning waste into energy, resources, and value.',
     bullets: [
       'Select the right technology for each site — vendor neutrality as a design principle.',
       'Execute with process and documentation that pass the strictest institutional audits.',

@@ -86,7 +86,6 @@ export default function AboutPage() {
 
               <div className="relative z-10">
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3.5 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-emerald-300 backdrop-blur-md transition-all duration-300 group-hover:border-emerald-400/50 group-hover:bg-emerald-500/20">
-                  <Icon name="leaf" size={13} className="text-emerald-400 transition-transform duration-300 group-hover:rotate-12" />
                   Our Vision
                 </span>
                 <h3 className="mt-6 font-display font-semibold leading-[1.15] tracking-tight text-white group-hover:text-emerald-50 transition-colors text-[clamp(1.45rem,1.8vw+0.5rem,2.15rem)]">
@@ -95,6 +94,18 @@ export default function AboutPage() {
                 <p className="mt-6 text-[1.02rem] leading-[1.85] text-white/85">
                   {VISION_MISSION.vision.description}
                 </p>
+                {VISION_MISSION.vision.bullets && VISION_MISSION.vision.bullets.length > 0 && (
+                  <ul className="mt-6 space-y-4 text-[0.98rem] leading-[1.7] text-white/85">
+                    {VISION_MISSION.vision.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-3.5 group/item">
+                        <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full border border-emerald-400/30 bg-emerald-500/15 flex items-center justify-center transition-all duration-300 group-hover:border-emerald-400 group-hover:bg-emerald-500/25">
+                          <Icon name="check" size={12} className="text-emerald-300" />
+                        </span>
+                        <span className="text-white/85 group-hover/item:text-white transition-colors">{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div className="relative z-10 mt-10 pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/60 font-medium">
@@ -116,12 +127,16 @@ export default function AboutPage() {
 
               <div className="relative z-10">
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3.5 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-emerald-300 backdrop-blur-md transition-all duration-300 group-hover:border-emerald-400/50 group-hover:bg-emerald-500/20">
-                  <Icon name="award" size={13} className="text-emerald-400 transition-transform duration-300 group-hover:scale-110" />
                   Our Mission
                 </span>
                 <h3 className="mt-6 font-display font-semibold leading-[1.15] tracking-tight text-white group-hover:text-emerald-50 transition-colors text-[clamp(1.45rem,1.8vw+0.5rem,2.15rem)]">
                   {VISION_MISSION.mission.title}
                 </h3>
+                {VISION_MISSION.mission.description && (
+                  <p className="mt-6 text-[1.02rem] leading-[1.85] text-white/85">
+                    {VISION_MISSION.mission.description}
+                  </p>
+                )}
                 <ul className="mt-6 space-y-4 text-[0.98rem] leading-[1.7] text-white/85">
                   {VISION_MISSION.mission.bullets.map((b) => (
                     <li key={b} className="flex items-start gap-3.5 group/item">
@@ -213,16 +228,18 @@ export default function AboutPage() {
                   <div>
                     <p className="text-sm font-semibold text-ink">Institutional Clean Energy Governance</p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <a
                       href={WHATSAPP_HREF}
-                      className="inline-flex h-11 items-center justify-center rounded-full bg-nova-500 px-6 text-xs font-semibold uppercase tracking-wider text-forest-950 transition hover:bg-nova-400"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-nova-500 px-6 text-xs font-semibold uppercase tracking-wider text-forest-950 transition hover:bg-nova-400 touch-manipulation"
                     >
                       Contact founder
                     </a>
                     <a
                       href="/contact"
-                      className="inline-flex h-11 items-center justify-center rounded-full border border-line px-5 text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-nova-400 hover:text-nova-700"
+                      className="inline-flex h-11 items-center justify-center rounded-full border border-line px-5 text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-nova-400 hover:text-nova-700 touch-manipulation"
                     >
                       Contact page
                     </a>

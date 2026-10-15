@@ -26,7 +26,7 @@ export type CardVariant = 'default' | 'elevated' | 'premium' | 'dark';
 export type IconName =
   | 'arrow-right' | 'arrow-left' | 'arrow-up' | 'arrow-down'
   | 'check' | 'close' | 'plus' | 'minus'
-  | 'menu' | 'search' | 'mail' | 'phone' | 'location'
+  | 'menu' | 'search' | 'mail' | 'phone' | 'phone-call' | 'whatsapp' | 'location'
   | 'globe' | 'leaf' | 'energy' | 'water' | 'gas' | 'recycle'
   | 'building' | 'factory' | 'shield' | 'award' | 'users' | 'clock'
   | 'facebook' | 'linkedin' | 'twitter' | 'instagram' | 'youtube';

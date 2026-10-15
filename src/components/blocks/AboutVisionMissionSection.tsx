@@ -55,9 +55,8 @@ export default function AboutVisionMissionSection() {
               />
 
               <div className="relative z-10 flex flex-col h-full">
-                {/* Eyebrow badge — "OUR VISION" nova-300 with nova icon */}
+                {/* Eyebrow badge — "OUR VISION" nova-300 */}
                 <div className="inline-flex items-center gap-2 rounded-full border border-nova-400/20 bg-nova-500/10 px-3.5 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-nova-300">
-                  <Icon name="leaf" size={12} />
                   OUR VISION
                 </div>
 
@@ -71,8 +70,28 @@ export default function AboutVisionMissionSection() {
 
                 {/* Description */}
                 <p className="mt-7 text-[1.02rem] leading-[1.85] text-white/72 max-w-xl">
-                  Green Nova aims to become a trusted engineering partner for India&apos;s clean-energy and environmental infrastructure, raising standards of quality, governance and lifecycle performance so investors, lenders and operators can commit capital with confidence.
+                  {vision.description}
                 </p>
+
+                {/* Vision bullet points with nova checkmark badges */}
+                {vision.bullets && vision.bullets.length > 0 && (
+                  <ul className="mt-8 space-y-5">
+                    {vision.bullets.map((b, i) => (
+                      <li key={i} className="flex items-start gap-4">
+                        <span
+                          className="flex items-center justify-center w-8 h-8 rounded-lg bg-nova-500/15 border border-nova-400/25 mt-0.5"
+                          style={{ flexShrink: 0 }}
+                          aria-hidden
+                        >
+                          <Icon name="check" size={16} className="text-nova-300" />
+                        </span>
+                        <p className="text-white/80 leading-[1.78] pt-0.5">
+                          {b}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 {/* Bottom 2-column metrics strip with thin border-t */}
                 <div className="mt-auto pt-10">
@@ -134,7 +153,6 @@ export default function AboutVisionMissionSection() {
               <div className="relative z-10 flex flex-col h-full">
                 {/* Gold eyebrow badge */}
                 <span className="ds-badge ds-badge--gold self-start">
-                  <Icon name="award" size={12} />
                   OUR MISSION
                 </span>
 
@@ -145,6 +163,13 @@ export default function AboutVisionMissionSection() {
                 >
                   {mission.title}
                 </h2>
+
+                {/* Mission description */}
+                {mission.description && (
+                  <p className="mt-7 text-[1.02rem] leading-[1.85] text-ink-muted max-w-xl">
+                    {mission.description}
+                  </p>
+                )}
 
                 {/* 4 bullet points with forest-green checkmark badges */}
                 <ul className="mt-8 space-y-5">

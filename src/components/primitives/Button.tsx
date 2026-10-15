@@ -112,12 +112,25 @@ export default function Button(props: ButtonProps) {
 
   if (as === 'a') {
     const anchorProps = rest as AnchorHTMLAttributes<HTMLAnchorElement>;
+    const isExternal =
+      anchorProps.target === '_blank' ||
+      (typeof anchorProps.href === 'string' &&
+        (anchorProps.href.startsWith('http://') ||
+          anchorProps.href.startsWith('https://') ||
+          anchorProps.href.startsWith('//')));
+
+    const rel = isExternal
+      ? anchorProps.rel
+        ? anchorProps.rel
+        : 'noopener noreferrer'
+      : anchorProps.rel;
+
     return (
       <a
         className={classes}
         aria-label={ariaLabel}
-        aria-describedby={loadingLabel ? undefined : undefined}
         {...anchorProps}
+        rel={rel}
       >
         {loading && loadingLabel ? (
           <span className="contents">

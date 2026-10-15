@@ -66,7 +66,7 @@ export default function HeroBlock() {
     <section
       id="top"
       aria-labelledby="hero-heading"
-      className="relative isolate min-h-[100svh] w-full overflow-hidden flex items-end lg:items-center pt-[var(--nav-height)] lg:pt-[calc(var(--nav-height)+2rem)] pb-section-lg"
+      className="relative isolate min-h-[100svh] w-full overflow-hidden flex items-end lg:items-center pt-[var(--nav-height)] lg:pt-[calc(var(--nav-height)+2rem)] pb-[max(3rem,env(safe-area-inset-bottom))] sm:pb-20 lg:pb-24"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -89,8 +89,7 @@ export default function HeroBlock() {
                 loading={idx === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 fetchPriority={idx === 0 ? 'high' : 'auto'}
-                className={`h-full w-full object-cover ${isActive ? 'hero-slide__kenburns' : ''}`}
-                style={{ objectPosition: 'center center' }}
+                className={`h-full w-full object-cover object-center lg:object-center ${isActive ? 'hero-slide__kenburns' : ''}`}
               />
             </div>
           );
@@ -100,26 +99,25 @@ export default function HeroBlock() {
       {/* ── Gradient overlays for legibility ── */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-950/90 via-forest-950/60 to-transparent"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/90 via-forest-950/30 to-forest-950/50 lg:bg-gradient-to-r lg:from-forest-950/90 lg:via-forest-950/60 lg:to-transparent"
       />
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/80 via-transparent to-forest-950/40"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-950/85 via-transparent to-forest-950/40 lg:from-forest-950/60"
       />
 
       {/* ── Content ── */}
       <div className="ds-container relative w-full">
         <div className="max-w-3xl xl:max-w-4xl reveal-up">
           {/* Eyebrow badge */}
-          <span className="inline-flex items-center gap-2.5 rounded-full border border-nova-400/30 bg-forest-950/60 px-4 py-1.5 backdrop-blur-md text-[0.72rem] font-bold uppercase tracking-[0.16em] text-nova-300 shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-nova-400 shadow-[0_0_8px_rgba(0,214,133,0.9)] pulse-indicator" />
+          <span className="inline-flex items-center rounded-full border border-nova-400/30 bg-forest-950/60 px-3.5 py-1.5 sm:px-4 backdrop-blur-md text-[0.65rem] sm:text-[0.72rem] font-bold uppercase tracking-[0.1em] sm:tracking-[0.16em] text-nova-300 shadow-sm">
             {HERO.eyebrow}
           </span>
 
           {/* Headline */}
           <h1
             id="hero-heading"
-            className="mt-6 font-display font-semibold leading-[1.02] tracking-[-0.035em] text-white text-balance text-[clamp(2.5rem,5vw+0.5rem,5.5rem)]"
+            className="mt-5 sm:mt-6 font-display font-semibold leading-[1.05] sm:leading-[1.02] tracking-[-0.03em] sm:tracking-[-0.035em] text-white text-balance text-[clamp(2rem,6vw+0.25rem,5.5rem)]"
             style={{ textShadow: '0 10px 32px rgba(4, 19, 13, 0.5)' }}
           >
             {h1}
@@ -131,20 +129,21 @@ export default function HeroBlock() {
 
           {/* Subtitle */}
           <p
-            className="mt-7 max-w-2xl text-[1.08rem] leading-[1.8] text-white/90 sm:text-[1.12rem]"
+            className="mt-5 sm:mt-7 max-w-2xl text-[0.98rem] sm:text-[1.12rem] leading-[1.75] sm:leading-[1.8] text-white/90"
             style={{ textShadow: '0 6px 22px rgba(10, 30, 21, 0.34)' }}
           >
             {HERO.subtitle}
           </p>
 
           {/* CTAs */}
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
             <Button
               as="a"
               href={HERO.primaryCta.href}
               variant="accent"
               size="lg"
               iconRight="arrow-right"
+              className="w-full sm:w-auto justify-center"
             >
               {HERO.primaryCta.label}
             </Button>
@@ -155,6 +154,7 @@ export default function HeroBlock() {
               size="lg"
               inverted
               iconRight="arrow-right"
+              className="w-full sm:w-auto justify-center"
             >
               {HERO.secondaryCta.label}
             </Button>
@@ -162,7 +162,7 @@ export default function HeroBlock() {
         </div>
 
         {/* ── Slideshow navigation dots ── */}
-        <div className="mt-16 lg:mt-24 flex items-center gap-3" role="tablist" aria-label="Hero background slides">
+        <div className="mt-10 sm:mt-16 lg:mt-24 flex items-center gap-2.5 sm:gap-3" role="tablist" aria-label="Hero background slides">
           {slides.map((slide, idx) => (
             <button
               key={slide.src + '-dot'}
@@ -170,10 +170,10 @@ export default function HeroBlock() {
               aria-selected={idx === activeIndex}
               aria-label={`Go to slide ${idx + 1} of ${slides.length}`}
               onClick={() => goTo(idx)}
-              className={`group relative h-2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              className={`group relative h-2.5 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] touch-manipulation before:absolute before:-inset-2.5 before:content-[''] ${
                 idx === activeIndex
                   ? 'w-10 bg-nova-400 shadow-[0_0_14px_rgba(74,208,142,0.6)]'
-                  : 'w-2 bg-white/30 hover:bg-white/50'
+                  : 'w-2.5 bg-white/30 hover:bg-white/50'
               }`}
             >
               {idx === activeIndex && (

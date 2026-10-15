@@ -58,6 +58,12 @@ export default function VisionMissionSection() {
                 {mission.title}
               </h2>
 
+              {mission.description && (
+                <p className="mt-7 text-[1.05rem] leading-[1.8] text-ink-muted max-w-xl">
+                  {mission.description}
+                </p>
+              )}
+
               <ul className="mt-8 space-y-5">
                 {mission.bullets.map((b, i) => (
                   <li key={i} className="flex items-start gap-4">

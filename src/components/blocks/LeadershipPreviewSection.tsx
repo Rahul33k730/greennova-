@@ -49,8 +49,7 @@ export default function LeadershipPreviewSection() {
 
               <div className="md:col-span-7 flex flex-col justify-between p-8 sm:p-10">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold tracking-wider uppercase border border-emerald-200">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold tracking-wider uppercase border border-emerald-200">
                     {LEADERSHIP.owner.function}
                   </div>
                   <p className="mt-5 text-[1.05rem] leading-relaxed text-ink-light">

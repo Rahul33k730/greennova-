@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Button from '@/components/primitives/Button';
 import Icon from '@/components/primitives/Icon';
 import { SectionHeader } from '@/components/section/Section';
 import { SERVICES } from '@/data/site';
@@ -26,17 +25,12 @@ export default function ServicesSection() {
 
       <div className="ds-container relative">
         {/* ── Section header ── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 lg:mb-16 reveal-up">
+        <div className="mb-14 lg:mb-16 reveal-up">
           <SectionHeader
             eyebrow="Our Services"
             title="Six Verticals. One Accountable Engineering Partner."
             subtitle="From green-fuel production plants to corporate decarbonisation advisory, we deliver clean energy and environmental infrastructure under one roof."
           />
-          <div className="hidden md:block">
-            <Button as="a" href="#contact" variant="accent" iconRight="arrow-right">
-              Talk with an expert
-            </Button>
-          </div>
         </div>
 
         {/* ── Uniform service cards grid ── */}
@@ -63,8 +57,7 @@ export default function ServicesSection() {
                     </div>
                   )}
                   <div className="p-6 md:p-7">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-nova-500" />
+                    <div className="flex items-center mb-3">
                       <span className="text-[0.72rem] font-semibold uppercase tracking-wider text-forest-700">
                         {s.footer}
                       </span>

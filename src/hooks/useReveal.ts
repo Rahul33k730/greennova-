@@ -51,24 +51,25 @@ export default function useReveal<T extends HTMLElement = HTMLElement>(
     }
 
     let cancelled = false;
-    const root = rootRef.current ?? document.body;
+    const container = rootRef.current ?? document.body;
 
-    const initial = (): HTMLElement[] => {
-      const nodes = Array.from(root.querySelectorAll<HTMLElement>(optsStable.selector));
-      nodes.forEach((n) => {
-        if (n.classList.contains('is-visible')) n.classList.remove('is-visible');
-      });
-      return nodes;
-    };
+    const nodes = Array.from(container.querySelectorAll<HTMLElement>(optsStable.selector));
+
+    // Immediately reveal elements that are already within or above the viewport
+    nodes.forEach((n) => {
+      const rect = n.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        n.classList.add('is-visible');
+      }
+    });
 
     const pending = new Set<Element>();
-    let nodes = initial();
 
     const io = new IntersectionObserver(
       (entries) => {
         if (cancelled) return;
         const visible = entries
-          .filter((e) => e.isIntersecting)
+          .filter((e) => e.isIntersecting || e.boundingClientRect.top < window.innerHeight)
           .map((e) => e.target)
           .sort((a, b) => {
             const ra = a.getBoundingClientRect();
@@ -93,28 +94,35 @@ export default function useReveal<T extends HTMLElement = HTMLElement>(
         });
       },
       {
-        root: rootRef.current ?? null,
-        rootMargin: optsStable.rootMargin,
+        root: null, // Always observe against the document viewport
+        rootMargin: optsStable.rootMargin || '50px 0px 50px 0px',
         threshold: optsStable.threshold,
       },
     );
 
-    nodes.forEach((n) => io.observe(n));
+    nodes.forEach((n) => {
+      if (!n.classList.contains('is-visible')) {
+        io.observe(n);
+      }
+    });
 
     // Observe dynamic content (e.g. added by lazy components) using a MutationObserver
     let mo: MutationObserver | undefined;
     if (typeof MutationObserver !== 'undefined') {
       mo = new MutationObserver(() => {
-        const next = Array.from(root.querySelectorAll<HTMLElement>(optsStable.selector));
-        const currentNodes = new Set(nodes);
+        const next = Array.from(container.querySelectorAll<HTMLElement>(optsStable.selector));
         for (const n of next) {
-          if (!currentNodes.has(n) && !n.classList.contains('is-visible')) {
-            io.observe(n);
-            nodes.push(n);
+          if (!n.classList.contains('is-visible')) {
+            const rect = n.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+              n.classList.add('is-visible');
+            } else {
+              io.observe(n);
+            }
           }
         }
       });
-      mo.observe(root, { childList: true, subtree: true });
+      mo.observe(container, { childList: true, subtree: true });
     }
 
     return () => {

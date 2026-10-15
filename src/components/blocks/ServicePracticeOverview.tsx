@@ -253,8 +253,7 @@ export default function ServicePracticeOverview({ service }: ServicePracticeOver
         <div className="mb-10 lg:mb-12">
           {/* Eyebrow badge */}
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-            <span className="inline-flex items-center gap-2 rounded-full border border-forest-200/80 bg-forest-50/90 px-3.5 py-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-forest-800 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="inline-flex items-center rounded-full border border-forest-200/80 bg-forest-50/90 px-3.5 py-1.5 text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-forest-800 shadow-xs">
               Practice Architecture &amp; Delivery Scope
             </span>
 
@@ -308,8 +307,7 @@ export default function ServicePracticeOverview({ service }: ServicePracticeOver
               <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-950/90 via-forest-950/30 to-transparent" />
 
               {/* Top Floating Badge */}
-              <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-forest-950/80 border border-white/20 backdrop-blur-md text-white text-[0.72rem] font-mono font-semibold tracking-wider uppercase">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="absolute top-4 left-4 inline-flex items-center px-3 py-1.5 rounded-full bg-forest-950/80 border border-white/20 backdrop-blur-md text-white text-[0.72rem] font-mono font-semibold tracking-wider uppercase">
                 Live EPC Blueprint
               </div>
 
@@ -591,8 +589,7 @@ export default function ServicePracticeOverview({ service }: ServicePracticeOver
               <div className="p-7 sm:p-9 rounded-3xl bg-white border border-line shadow-sm relative overflow-hidden">
                 <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
                   <div className="max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-50 border border-forest-200 text-forest-800 font-mono text-xs font-semibold uppercase tracking-wider mb-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-forest-50 border border-forest-200 text-forest-800 font-mono text-xs font-semibold uppercase tracking-wider mb-3">
                       Detailed Stage Inspection — Stage {activePipelineStep + 1}
                     </div>
                     <h3 className="font-display font-bold text-2xl text-ink mb-3">

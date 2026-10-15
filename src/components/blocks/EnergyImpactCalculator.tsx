@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import Icon from '@/components/primitives/Icon';
 import Button from '@/components/primitives/Button';
+import { COMPANY } from '@/data/site';
 
 interface SolutionOption {
   id: string;
@@ -256,7 +257,7 @@ export default function EnergyImpactCalculator() {
                 Request Feasibility Study for {capacityMw} MW
               </Button>
               <a
-                href="https://wa.me/919999999999?text=Hello%20Green%20Nova,%20I%20used%20your%20Decarbonization%20Calculator%20and%20want%20to%20discuss%20a%20project."
+                href={`https://wa.me/${COMPANY.whatsapp.label.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello Green Nova, I used your Decarbonization Calculator for a ${capacityMw} MW ${activeSolution.name} project and would like to discuss feasibility.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-500/20"

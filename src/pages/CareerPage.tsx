@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import SiteShell from '@/components/layout/SiteShell';
 import { SectionHeader } from '@/components/section/Section';
-import { PageHero, FAQBlock, BenefitGrid } from '@/components/blocks/PageBuildingBlocks';
+import { BenefitGrid } from '@/components/blocks/PageBuildingBlocks';
 import Icon from '@/components/primitives/Icon';
 import Button from '@/components/primitives/Button';
 import { COMPANY, WHATSAPP_HREF } from '@/data/site';
 import useSeo from '@/hooks/useSeo';
-import type { IconName } from '@/types/design-system';
+import { getPublishedJobs, type JobOpening } from '@/lib/jobs';
 
 /* ===========================================================
    DATA — Career Page Content
@@ -14,186 +15,28 @@ import type { IconName } from '@/types/design-system';
 
 const CAREER_CULTURE = [
   {
-    icon: 'energy' as IconName,
-    iconVariant: 'nova' as const,
     eyebrow: 'Purpose-Driven',
     title: 'Work That Matters',
     description:
       'Every project you touch contributes to India\'s clean-energy transition — from green hydrogen plants and solar parks to waste-to-energy facilities and environmental infrastructure.',
   },
   {
-    icon: 'users' as IconName,
-    iconVariant: 'forest' as const,
     eyebrow: 'Collaborative',
     title: 'One Team, Many Verticals',
     description:
       'Work alongside engineers, project managers and domain experts across six verticals. Collaboration here means real cross-functional exposure, not siloed departments.',
   },
   {
-    icon: 'award' as IconName,
-    iconVariant: 'gold' as const,
     eyebrow: 'Growth-Oriented',
     title: 'Build Your Engineering Career',
     description:
       'Structured mentorship, on-site exposure, technology training and a clear career trajectory. We invest in people who want to grow with the clean-energy sector.',
   },
   {
-    icon: 'globe' as IconName,
-    iconVariant: 'outline' as const,
     eyebrow: 'PAN India',
     title: 'Opportunities Across India',
     description:
       'From our Pune headquarters to project sites across industrial corridors, coastal regions and emerging clean-energy hubs — your work takes you where it matters.',
-  },
-];
-
-interface JobOpening {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: 'Full-Time' | 'Contract' | 'Internship';
-  experience: string;
-  description: string;
-  responsibilities: string[];
-  qualifications: string[];
-}
-
-const JOB_OPENINGS: JobOpening[] = [
-  {
-    id: 'sr-process-engineer',
-    title: 'Sr. Process Engineer — Green Hydrogen',
-    department: 'Green Hydrogen',
-    location: 'Pune / Project Site',
-    type: 'Full-Time',
-    experience: '5–10 years',
-    description:
-      'Lead process design for alkaline and PEM electrolyser systems, hydrogen compression, storage and dispensing infrastructure. Work directly with OEMs and site teams.',
-    responsibilities: [
-      'Develop P&IDs, heat & mass balances and process simulations for H₂ plants',
-      'Lead HAZOP, safety studies and design reviews',
-      'Coordinate with procurement for OEM evaluation and FAT',
-      'Support site commissioning and performance testing',
-    ],
-    qualifications: [
-      'B.Tech/M.Tech in Chemical / Electrochemical Engineering',
-      '5+ years in process plant design (oil & gas, chemicals or green hydrogen)',
-      'Familiarity with ASPEN, HYSYS or equivalent simulation tools',
-      'Willingness to travel to project sites across India',
-    ],
-  },
-  {
-    id: 'project-manager-re',
-    title: 'Project Manager — Renewable Energy',
-    department: 'Renewable Hybrid Energy',
-    location: 'Pune / Site-Based',
-    type: 'Full-Time',
-    experience: '6–12 years',
-    description:
-      'Manage utility-scale solar, wind and solar-wind-BESS hybrid projects from feasibility through commissioning and handover. Own schedule, quality and stakeholder delivery.',
-    responsibilities: [
-      'End-to-end project execution from mobilisation to COD',
-      'Manage subcontractors, vendors and site teams',
-      'Monthly reporting, MIS and client presentations',
-      'EHS governance and quality assurance on site',
-    ],
-    qualifications: [
-      'B.E./B.Tech in Electrical, Mechanical or Civil Engineering',
-      '6+ years in solar/wind EPC project management',
-      'PMP or equivalent certification preferred',
-      'Strong understanding of grid interconnection and CERC/SERC regulations',
-    ],
-  },
-  {
-    id: 'env-engineer',
-    title: 'Environmental Engineer',
-    department: 'Environmental Engineering',
-    location: 'Pune',
-    type: 'Full-Time',
-    experience: '3–6 years',
-    description:
-      'Conduct EIA studies, air and noise pollution assessments, and environmental compliance audits for industrial and infrastructure projects across India.',
-    responsibilities: [
-      'Prepare EIA/EMP reports for MoEFCC and SEIAA submissions',
-      'Design air pollution control systems (APCS) and stack monitoring plans',
-      'Coordinate with regulatory bodies for environmental clearances',
-      'Support clients with compliance monitoring and reporting',
-    ],
-    qualifications: [
-      'M.Tech/M.Sc in Environmental Engineering or Environmental Science',
-      '3+ years in EIA consulting or environmental compliance',
-      'Knowledge of MoEFCC notification, CPCB/SPCB standards',
-      'Proficiency in GIS tools and environmental modelling software',
-    ],
-  },
-  {
-    id: 'sustainability-analyst',
-    title: 'Sustainability Analyst — ESG Advisory',
-    department: 'Sustainability Advisory',
-    location: 'Pune (Hybrid)',
-    type: 'Full-Time',
-    experience: '2–5 years',
-    description:
-      'Support corporate clients with GHG inventories, BRSR reporting, decarbonisation roadmaps and net-zero target setting across scope 1, 2 and 3 emissions.',
-    responsibilities: [
-      'Conduct GHG emission inventories using GHG Protocol',
-      'Draft BRSR/BRSR Core disclosures for listed entities',
-      'Develop net-zero pathways and science-based targets',
-      'Research carbon credit mechanisms and I-REC markets',
-    ],
-    qualifications: [
-      'MBA / M.Tech with specialisation in Sustainability or Energy',
-      '2+ years in ESG consulting, sustainability reporting or carbon advisory',
-      'Familiarity with SEBI BRSR, GRI, TCFD and SBTi frameworks',
-      'Strong analytical and client-facing skills',
-    ],
-  },
-  {
-    id: 'cbg-intern',
-    title: 'Graduate Engineer Trainee — CBG',
-    department: 'Compressed Biogas',
-    location: 'Pune / Project Site',
-    type: 'Internship',
-    experience: 'Fresher / 0–1 year',
-    description:
-      'Join our Compressed Biogas team to learn anaerobic digestion plant design, feedstock analysis and biogas upgrading systems. Ideal for recent graduates passionate about green fuels.',
-    responsibilities: [
-      'Assist with feedstock characterisation and lab testing',
-      'Support process design documentation and BOQ preparation',
-      'Participate in site visits and vendor coordination',
-      'Contribute to techno-economic feasibility models',
-    ],
-    qualifications: [
-      'B.Tech in Biotechnology, Chemical, or Environmental Engineering',
-      'Strong interest in biogas, biomass and circular economy',
-      'Good communication and documentation skills',
-      'Willingness to work on-site for project durations',
-    ],
-  },
-];
-
-const DEPARTMENTS = ['All', ...Array.from(new Set(JOB_OPENINGS.map((j) => j.department)))];
-
-const CAREER_FAQ = [
-  {
-    q: 'How do I apply for a position at Green Nova?',
-    a: 'You can apply by clicking the "Apply Now" button on any open position listed on this page. Alternatively, send your resume and a cover letter to connect@greennovaenergy.in with the position title in the subject line.',
-  },
-  {
-    q: 'What is the interview process like?',
-    a: 'Our process typically includes: (1) Resume screening, (2) Technical phone interview with the hiring manager, (3) On-site or video panel interview with the team, and (4) Final discussion with leadership. The entire process takes 2–3 weeks.',
-  },
-  {
-    q: 'Do you offer internship or apprenticeship programmes?',
-    a: 'Yes. We offer structured internships for final-year engineering students and recent graduates across our verticals — particularly in Green Hydrogen, CBG, Renewable Energy and Environmental Engineering. Internships include mentorship, site exposure and a clear path to full-time conversion.',
-  },
-  {
-    q: 'What locations does Green Nova hire for?',
-    a: 'Our corporate office is in Pune, Maharashtra. However, many roles involve travel to or placement at project sites across India — including industrial corridors, coastal regions, semi-arid zones and urban centres depending on the project.',
-  },
-  {
-    q: 'What benefits does Green Nova offer?',
-    a: 'We offer competitive compensation, health insurance, performance-linked incentives, structured learning and development budgets, site allowances for field roles, and the opportunity to work on meaningful clean-energy and environmental projects that shape India\'s future.',
   },
 ];
 
@@ -204,6 +47,63 @@ const CAREER_FAQ = [
 export default function CareerPage() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [jobs, setJobs] = useState<JobOpening[]>(() => getPublishedJobs());
+
+  const refreshJobs = useCallback(() => {
+    setJobs(getPublishedJobs());
+  }, []);
+
+  // Keep the listings in sync with the admin job store
+  useEffect(() => {
+    const handler = () => refreshJobs();
+    window.addEventListener('storage', handler);
+    window.addEventListener('green-nova-jobs-updated', handler);
+    return () => {
+      window.removeEventListener('storage', handler);
+      window.removeEventListener('green-nova-jobs-updated', handler);
+    };
+  }, [refreshJobs]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileError(null);
+    const file = e.target.files?.[0];
+    if (!file) {
+      setSelectedFile(null);
+      return;
+    }
+
+    // Max 10MB limit check
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setFileError('File size exceeds the 10 MB limit. Please select a smaller document.');
+      e.target.value = '';
+      setSelectedFile(null);
+      return;
+    }
+
+    // Strict extension check
+    const allowedExtensions = ['.pdf', '.doc', '.docx', '.txt'];
+    const fileName = file.name.toLowerCase();
+    const isAllowed = allowedExtensions.some((ext) => fileName.endsWith(ext));
+    if (!isAllowed) {
+      setFileError('Invalid file format. Please upload a PDF, DOC, DOCX, or TXT file.');
+      e.target.value = '';
+      setSelectedFile(null);
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    setFileError(null);
+    const input = document.getElementById('resume') as HTMLInputElement | null;
+    if (input) input.value = '';
+  };
 
   useSeo({
     title: 'Careers — Join Green Nova Energy & Environment',
@@ -211,27 +111,96 @@ export default function CareerPage() {
     keywords: ['Green Nova careers', 'clean energy jobs India', 'green hydrogen engineer', 'renewable energy jobs', 'environmental engineering careers', 'sustainability analyst jobs'],
     type: 'website',
     breadcrumbs: [{ name: 'Home', item: '/' }, { name: 'Careers' }],
+    image: '/images/career_frontpage.jpeg',
   });
 
+  const departments = ['All', ...Array.from(new Set(jobs.map((j) => j.department)))];
+
   const filteredJobs = activeFilter === 'All'
-    ? JOB_OPENINGS
-    : JOB_OPENINGS.filter((j) => j.department === activeFilter);
+    ? jobs
+    : jobs.filter((j) => j.department === activeFilter);
 
   return (
     <SiteShell>
-      {/* ========== PAGE HERO ========== */}
-      <PageHero
-        eyebrow="Careers at Green Nova"
-        eyebrowVariant="gold"
-        title="Build Your Career in India's Clean-Energy Future."
-        subtitle="We are looking for engineers, project managers, analysts and domain experts who want to do meaningful work — delivering renewable energy, green fuels, environmental infrastructure and sustainability advisory across India."
-        breadcrumbs={[
-          { label: 'Home', to: '/' },
-          { label: 'Careers' },
-        ]}
-        primaryCta={{ label: 'View open positions', to: '#openings' }}
-        secondaryCta={{ label: 'Talk to us', to: WHATSAPP_HREF }}
-      />
+      {/* ========== PAGE HERO — SIDE IMAGE LAYOUT ========== */}
+      <section className="relative isolate overflow-hidden bg-paper pt-[calc(var(--nav-height)+2rem)] pb-16 lg:pb-24 border-b border-line">
+        <div aria-hidden className="absolute inset-0 surface-grid opacity-25 mask-fade-b pointer-events-none" />
+        <div aria-hidden className="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-nova-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div aria-hidden className="absolute top-1/3 -right-24 w-[28rem] h-[28rem] bg-gold-400/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="ds-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left: Headline & CTAs */}
+            <div className="lg:col-span-6 reveal-up">
+              {/* Breadcrumbs */}
+              <nav aria-label="Breadcrumb" className="mb-6">
+                <ol className="flex flex-wrap items-center gap-2 text-[0.82rem] font-medium text-ink-muted">
+                  <li className="inline-flex items-center gap-2">
+                    <Link to="/" className="text-ink-muted hover:text-ink transition-colors inline-flex items-center leading-none">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="inline-flex items-center gap-2">
+                    <Icon name="arrow-right" size={12} className="text-charcoal-400" />
+                  </li>
+                  <li className="inline-flex items-center">
+                    <span className="text-ink font-semibold inline-flex items-center leading-none">
+                      Careers
+                    </span>
+                  </li>
+                </ol>
+              </nav>
+
+              <span className="ds-eyebrow ds-eyebrow--gold mb-4">
+                Careers at Green Nova
+              </span>
+
+              <h1 className="font-display font-bold tracking-tight text-forest-950 leading-[1.08] text-balance text-[clamp(2.2rem,3.4vw+0.8rem,3.8rem)]">
+                Build Your Career in India's Clean-Energy Future.
+              </h1>
+              <div className="h-1.5 w-24 bg-gradient-to-r from-nova-500 via-gold-400 to-transparent rounded-full mt-5 mb-6 shadow-xs" />
+
+              <p className="text-[1.08rem] leading-[1.8] text-ink-muted max-w-2xl">
+                We are looking for engineers, project managers, analysts and domain experts who want to do meaningful work — delivering renewable energy, green fuels, environmental infrastructure and sustainability advisory across India.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <a
+                  href="#openings"
+                  className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-forest-950 hover:bg-forest-900 active:bg-black text-white font-semibold text-[0.96rem] px-7 py-3.5 shadow-lg shadow-forest-950/20 hover:shadow-xl hover:shadow-forest-900/30 transition-all duration-250"
+                >
+                  <span>View open positions</span>
+                  <Icon name="arrow-right" size={15} className="transition-transform duration-200 text-gold-300 group-hover:translate-x-1" />
+                </a>
+                <a
+                  href={WHATSAPP_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white/60 hover:border-nova-400/50 hover:bg-white text-ink font-semibold text-[0.96rem] px-7 py-3.5 transition-all duration-250"
+                >
+                  <span>Talk to us</span>
+                  <Icon name="arrow-right" size={15} />
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Hero Side Image */}
+            <div className="lg:col-span-6 reveal-up">
+              <div className="relative rounded-3xl overflow-hidden border border-line bg-forest-950 shadow-2xl group">
+                <div className="relative aspect-[4/3] lg:aspect-square w-full max-h-[520px] overflow-hidden">
+                  <img
+                    src="/images/career_frontpage.jpeg"
+                    alt="Build your career with Green Nova Energy — clean-energy engineering opportunities across India"
+                    className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="eager"
+                  />
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-950/40 via-transparent to-transparent" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ========== WHY JOIN US ========== */}
       <section
@@ -247,7 +216,7 @@ export default function CareerPage() {
               subtitle="We offer more than jobs — we offer the chance to work on projects that matter, with a team that values engineering rigour, cross-vertical exposure and genuine career growth."
             />
           </div>
-          <BenefitGrid items={CAREER_CULTURE} />
+          <BenefitGrid items={CAREER_CULTURE} eyebrowAlign="left" />
         </div>
       </section>
 
@@ -262,13 +231,13 @@ export default function CareerPage() {
             <SectionHeader
               eyebrow="Open Positions"
               title="Current Opportunities."
-              subtitle="Explore our open roles below. Can't find the right fit? Send your resume to connect@greennovaenergy.in — we're always interested in talented engineers and sustainability professionals."
+              subtitle={`Explore our open roles below. Can't find the right fit? Send your resume to ${COMPANY.email} — we're always interested in talented engineers and sustainability professionals.`}
             />
           </div>
 
           {/* Department filters */}
           <div className="flex flex-wrap gap-2 mb-10">
-            {DEPARTMENTS.map((dept) => (
+            {departments.map((dept) => (
               <button
                 key={dept}
                 type="button"
@@ -396,7 +365,7 @@ export default function CareerPage() {
                         <div className="mt-8 flex flex-wrap items-center gap-4">
                           <Button
                             as="a"
-                            href={`mailto:connect@greennovaenergy.in?subject=Application: ${job.title}`}
+                            href={`mailto:${COMPANY.email}?subject=Application: ${job.title}`}
                             variant="accent"
                             size="md"
                             iconRight="arrow-right"
@@ -431,125 +400,303 @@ export default function CareerPage() {
                 No openings in this department right now
               </h3>
               <p className="text-[0.94rem] text-ink-muted">
-                Send your resume to <strong>connect@greennovaenergy.in</strong> and we'll reach out when something opens up.
+                Send your resume to <strong>{COMPANY.email}</strong> and we'll reach out when something opens up.
               </p>
             </div>
           )}
         </div>
       </section>
 
-      {/* ========== APPLICATION PROCESS ========== */}
+      {/* ========== UPLOAD YOUR RESUME ========== */}
       <section
-        id="process"
-        aria-labelledby="process-title"
-        className="ds-section"
+        id="apply"
+        aria-labelledby="apply-title"
+        className="ds-section relative isolate overflow-hidden bg-paper-warm"
       >
-        <div className="ds-container">
-          <div className="mb-14 lg:mb-16">
-            <SectionHeader
-              eyebrow="How to Join"
-              title="Our Hiring Process."
-              subtitle="A transparent, structured process designed to find the right fit — for you and for us."
-            />
-          </div>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-cream-50 via-paper-warm to-gold-50/50" />
+        <div aria-hidden className="absolute inset-0 surface-grid opacity-30 mask-fade-b pointer-events-none" />
+        <div aria-hidden className="absolute -top-32 -right-20 w-[44rem] h-[44rem] rounded-full bg-gradient-to-br from-gold-300/20 via-gold-200/10 to-transparent blur-3xl pointer-events-none" />
+        <div aria-hidden className="absolute -bottom-40 -left-24 w-[36rem] h-[36rem] rounded-full bg-gradient-to-br from-forest-200/25 via-forest-100/10 to-transparent blur-3xl pointer-events-none" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-3">
-            {[
-              { phase: '01', title: 'Application Review', body: 'Submit your resume and cover letter. Our team reviews every application against role requirements within 5 business days.', icon: 'search' as IconName },
-              { phase: '02', title: 'Technical Interview', body: 'A 45–60 minute conversation with the hiring manager focused on your technical depth, problem-solving approach and domain experience.', icon: 'users' as IconName },
-              { phase: '03', title: 'Panel Discussion', body: 'Meet the team — cross-functional panellists assess culture fit, collaboration style and alignment with our engineering standards.', icon: 'building' as IconName },
-              { phase: '04', title: 'Offer & Onboarding', body: 'Receive your offer, complete onboarding, and start building India\'s clean-energy infrastructure from day one.', icon: 'award' as IconName },
-            ].map((p, i) => (
-              <div
-                key={p.phase}
-                className="relative rounded-2xl border border-line bg-white p-7 transition-all duration-400 ease-corp hover:border-nova-400/40 hover:shadow-lg hover:-translate-y-0.5"
-              >
-                <div className="flex items-center justify-between mb-5">
-                  <span className="ds-badge ds-badge--nova">Step {p.phase}</span>
-                  <span aria-hidden className="font-mono text-[0.72rem] font-semibold text-charcoal-400">
-                    0{i + 1}/04
-                  </span>
-                </div>
-                <div className="relative ds-icon ds-icon--xl ds-icon--forest mb-5">
-                  <Icon name={p.icon} size={24} />
-                  <span aria-hidden className="hidden lg:block absolute -top-1 -right-1 h-3 w-3 rounded-full bg-nova-500 ring-4 ring-paper" />
-                </div>
-                <h3 className="font-display text-[1.18rem] font-semibold tracking-tight leading-snug mb-3">
-                  {p.title}
-                </h3>
-                <p className="text-[0.9rem] leading-[1.75] text-ink-muted">{p.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== CAREER FAQ ========== */}
-      <section
-        id="career-faq"
-        aria-labelledby="career-faq-title"
-        className="ds-section bg-paper-warm"
-      >
-        <div className="ds-container">
-          <div className="mb-14 lg:mb-16 text-center max-w-3xl mx-auto">
-            <span className="ds-eyebrow ds-eyebrow--gold justify-center">Frequently Asked Questions</span>
+        <div className="ds-container relative">
+          <div className="mb-12 lg:mb-16 text-center max-w-3xl mx-auto">
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold-400/40 bg-gold-50 px-4 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-gold-700 shadow-sm">
+              <Icon name="leaf" size={12} />
+              Join the team
+            </span>
             <h2
-              id="career-faq-title"
-              className="mt-4 font-display font-semibold leading-[1.08] tracking-[-0.03em] text-ink text-balance text-[clamp(1.9rem,2.5vw+1rem,3rem)]"
+              id="apply-title"
+              className="mt-6 font-display font-semibold leading-[1.08] tracking-[-0.03em] text-forest-950 text-balance text-[clamp(1.9rem,2.5vw+1rem,3rem)]"
             >
-              Career FAQs.
+              Upload Your Resume.
             </h2>
-            <p className="mt-6 text-[1.05rem] leading-[1.8] text-ink-muted">
-              Common questions from candidates about working at Green Nova.
+            <p className="mt-6 text-[1.05rem] leading-[1.8] text-ink-muted max-w-2xl mx-auto">
+              Don't see your dream role listed? No problem — submit your resume below with your preferred position. Our HR team will get back to you when a matching opportunity opens up.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <FAQBlock items={CAREER_FAQ} />
-          </div>
-        </div>
-      </section>
+          <div className="relative mx-auto max-w-4xl rounded-3xl border border-line-strong bg-white shadow-[0_30px_80px_-20px_rgba(15,42,33,0.15)] p-8 md:p-10 lg:p-12 overflow-hidden">
+            <div aria-hidden className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-gold-400/50 to-transparent" />
 
-      {/* ========== DARK CTA ========== */}
-      <section className="relative isolate overflow-hidden" aria-labelledby="career-cta-title">
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-forest-950 via-forest-900 to-forest-950" />
-        <div aria-hidden className="absolute inset-0 bg-grid-pattern opacity-[0.06] mask-fade-b pointer-events-none" />
-        <div aria-hidden className="absolute -top-32 -right-20 w-[44rem] h-[44rem] rounded-full bg-gradient-to-br from-nova-500/20 via-nova-400/5 to-transparent blur-3xl pointer-events-none" />
-        <div aria-hidden className="absolute -bottom-40 -left-24 w-[36rem] h-[36rem] rounded-full bg-gradient-to-br from-gold-400/15 to-transparent blur-3xl pointer-events-none" />
+            <form
+              action={`https://formsubmit.co/${COMPANY.email}`}
+              method="POST"
+              encType="multipart/form-data"
+              className="relative space-y-6"
+              onSubmit={(e) => {
+                const form = e.currentTarget;
+                const honey = (form.elements.namedItem('_honey') as HTMLInputElement | null)?.value;
+                if (honey) {
+                  e.preventDefault();
+                  // Bot trapped!
+                  window.location.href = `${window.location.origin}/careers?submitted=1`;
+                  return;
+                }
 
-        <div className="ds-container relative py-section-lg">
-          <div className="relative mx-auto max-w-5xl rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-10 md:p-14 lg:p-16 overflow-hidden">
-            <div aria-hidden className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-nova-400/40 to-transparent" />
-            <div className="relative max-w-3xl mx-auto text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-nova-400/30 bg-nova-500/10 px-4 py-1.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-nova-200">
-                <Icon name="users" size={12} />
-                Join the team
-              </span>
-              <h2
-                id="career-cta-title"
-                className="mt-6 font-display font-semibold leading-[1.08] tracking-[-0.03em] text-white text-balance text-[clamp(1.9rem,2.5vw+1rem,3rem)]"
-              >
-                Don't See Your Role? We Still Want to Hear from You.
-              </h2>
-              <p className="mt-6 text-[1.05rem] leading-[1.8] text-white/72">
-                We're always looking for talented engineers and sustainability professionals. Send your resume to{' '}
-                <a href={`mailto:${COMPANY.email}?subject=Career Application — Engineering`} className="text-white font-semibold underline underline-offset-4 decoration-nova-400">
-                  {COMPANY.email}
-                </a>{' '}
-                or reach out directly at +91 8550983678 / +91 7276817964.
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button as="a" href={`mailto:${COMPANY.email}?subject=Career Application — Engineering`} variant="accent" size="lg" iconRight="arrow-right">
-                  Send your resume
-                </Button>
-                <Button as="a" href={WHATSAPP_HREF} variant="ghost" size="lg" inverted iconRight="arrow-right">
-                  WhatsApp us
-                </Button>
+                if (!selectedFile) {
+                  e.preventDefault();
+                  setFileError('Please select a resume file (PDF, DOC, DOCX, or TXT) before submitting.');
+                  return;
+                }
+
+                setIsSubmitting(true);
+              }}
+            >
+              {/* Anti-spam Honeypot Trap (hidden from human users, traps bots) */}
+              <input
+                type="text"
+                name="_honey"
+                style={{ display: 'none' }}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
+              <input type="hidden" name="_subject" value="New Resume Submission — Green Nova Careers" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_autoresponse" value="Thank you for applying to Green Nova! We have received your resume and will review it shortly." />
+              <input type="hidden" name="_next" value={typeof window !== 'undefined' ? `${window.location.origin}/careers?submitted=1` : ''} />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Full Name */}
+                <div className="space-y-2">
+                  <label htmlFor="fullName" className="block text-[0.82rem] font-semibold text-forest-900">
+                    Full Name <span className="text-gold-600">*</span>
+                  </label>
+                  <div className="group relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-charcoal-400 transition-colors group-focus-within:text-gold-600">
+                      <Icon name="users" size={15} />
+                    </div>
+                    <input
+                      id="fullName"
+                      name="Full Name"
+                      type="text"
+                      required
+                      maxLength={120}
+                      autoComplete="name"
+                      placeholder="Your full name"
+                      className="w-full text-[1rem] rounded-xl border border-line bg-paper text-ink placeholder:text-charcoal-400 pl-11 pr-4 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-[0.82rem] font-semibold text-forest-900">
+                    Email Address <span className="text-gold-600">*</span>
+                  </label>
+                  <div className="group relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-charcoal-400 transition-colors group-focus-within:text-gold-600">
+                      <Icon name="mail" size={15} />
+                    </div>
+                    <input
+                      id="email"
+                      name="Email"
+                      type="email"
+                      required
+                      maxLength={150}
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      className="w-full text-[1rem] rounded-xl border border-line bg-paper text-ink placeholder:text-charcoal-400 pl-11 pr-4 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                    />
+                  </div>
+                </div>
+
+                {/* Phone */}
+                <div className="space-y-2">
+                  <label htmlFor="phone" className="block text-[0.82rem] font-semibold text-forest-900">
+                    Phone Number
+                  </label>
+                  <div className="group relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-charcoal-400 transition-colors group-focus-within:text-gold-600">
+                      <Icon name="phone" size={15} />
+                    </div>
+                    <input
+                      id="phone"
+                      name="Phone"
+                      type="tel"
+                      maxLength={30}
+                      autoComplete="tel"
+                      placeholder={COMPANY.phone}
+                      className="w-full text-[1rem] rounded-xl border border-line bg-paper text-ink placeholder:text-charcoal-400 pl-11 pr-4 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                    />
+                  </div>
+                </div>
+
+                {/* Position applying for */}
+                <div className="space-y-2">
+                  <label htmlFor="position" className="block text-[0.82rem] font-semibold text-forest-900">
+                    Position Applying For
+                  </label>
+                  <div className="group relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-charcoal-400 transition-colors group-focus-within:text-gold-600">
+                      <Icon name="award" size={15} />
+                    </div>
+                    <select
+                      id="position"
+                      name="Position"
+                      className="w-full text-[1rem] appearance-none rounded-xl border border-line bg-paper text-ink pl-11 pr-10 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                      style={{ colorScheme: 'light' }}
+                    >
+                      <option value="General Application / Not Listed">General Application</option>
+                      {jobs.map((j) => (
+                        <option key={j.id} value={j.title}>{j.title}</option>
+                      ))}
+                      <option value="Internship">Internship (General)</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-charcoal-400 group-focus-within:text-gold-600">
+                      <Icon name="arrow-down" size={12} />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+
+              {/* Years of experience */}
+              <div className="space-y-2">
+                <label htmlFor="experience" className="block text-[0.82rem] font-semibold text-forest-900">
+                  Total Experience (Years)
+                </label>
+                <div className="group relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-charcoal-400 transition-colors group-focus-within:text-gold-600">
+                    <Icon name="clock" size={15} />
+                  </div>
+                  <input
+                    id="experience"
+                    name="Experience"
+                    type="text"
+                    maxLength={60}
+                    placeholder="e.g. 3-5 years, Fresher, etc."
+                    className="w-full text-[1rem] rounded-xl border border-line bg-paper text-ink placeholder:text-charcoal-400 pl-11 pr-4 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                  />
+                </div>
+              </div>
+
+              {/* Cover letter / short message */}
+              <div className="space-y-2">
+                <label htmlFor="message" className="block text-[0.82rem] font-semibold text-forest-900">
+                  Cover Letter / Short Intro
+                </label>
+                <textarea
+                  id="message"
+                  name="Message"
+                  rows={4}
+                  maxLength={3000}
+                  placeholder="Tell us briefly about yourself, why Green Nova, and which projects or domains you're most excited about..."
+                  className="w-full text-[1rem] resize-y rounded-xl border border-line bg-paper text-ink placeholder:text-charcoal-400 px-4 py-3.5 transition-all duration-200 focus:border-gold-400/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-400/20"
+                />
+              </div>
+
+              {/* Resume upload */}
+              <div className="space-y-2">
+                <label htmlFor="resume" className="block text-[0.82rem] font-semibold text-forest-900">
+                  Upload Your Resume <span className="text-gold-600">*</span>
+                </label>
+
+                {fileError && (
+                  <div className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
+                    <Icon name="close" size={14} className="text-red-600 shrink-0" />
+                    <span>{fileError}</span>
+                  </div>
+                )}
+
+                {selectedFile ? (
+                  <div className="rounded-2xl border-2 border-emerald-500/40 bg-emerald-50/50 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="h-11 w-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+                        <Icon name="check" size={20} />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-forest-950 text-sm truncate">
+                          {selectedFile.name}
+                        </div>
+                        <div className="text-xs text-ink-muted">
+                          {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB • Ready for submission
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveFile}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-700 hover:text-red-900 bg-white border border-red-200 hover:border-red-300 rounded-lg px-3 py-2 transition-colors self-start sm:self-auto"
+                    >
+                      <Icon name="close" size={13} />
+                      <span>Remove file</span>
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="resume"
+                    className="group block cursor-pointer rounded-2xl border-2 border-dashed border-forest-200 bg-forest-50/40 hover:border-gold-400/60 hover:bg-gold-50/60 transition-all duration-200 p-8 md:p-10 touch-manipulation"
+                  >
+                    <input
+                      id="resume"
+                      name="Resume"
+                      type="file"
+                      required
+                      accept=".pdf,.doc,.docx,.txt"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <div className="flex flex-col items-center justify-center text-center gap-3">
+                      <div className="h-12 w-12 rounded-2xl bg-gold-100 border border-gold-300/50 flex items-center justify-center text-gold-700 group-hover:scale-110 transition-transform duration-200 shadow-xs">
+                        <Icon name="arrow-down" size={20} />
+                      </div>
+                      <div>
+                        <div className="text-forest-950 font-semibold text-[0.98rem]">
+                          Click or tap to upload your resume
+                        </div>
+                        <div className="mt-1 text-[0.78rem] text-ink-muted">
+                          Accepted formats: PDF, DOC, DOCX, TXT • Max 10 MB
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                )}
+              </div>
+
+              {/* Submit */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                <p className="text-[0.76rem] text-ink-muted max-w-md">
+                  By submitting this form, you agree that your resume & details will be emailed directly to{' '}
+                  <span className="text-forest-900 font-medium">{COMPANY.email}</span> for hiring review.
+                </p>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto group relative inline-flex items-center justify-center gap-2 rounded-xl bg-forest-950 hover:bg-forest-900 active:bg-black text-white font-semibold text-[0.96rem] px-7 py-3.5 shadow-lg shadow-forest-950/20 hover:shadow-xl hover:shadow-forest-900/30 transition-all duration-250 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest-700 disabled:opacity-60 disabled:cursor-not-allowed touch-manipulation"
+                >
+                  <span>{isSubmitting ? 'Uploading resume…' : 'Send Resume to Green Nova'}</span>
+                  {!isSubmitting && (
+                    <Icon name="arrow-right" size={15} className="transition-transform duration-200 text-gold-300 group-hover:translate-x-1" />
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </section>
+
     </SiteShell>
   );
 }

@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import Icon from '../primitives/Icon';
+import LegalModal, { type LegalTab } from '../blocks/LegalModal';
 import { COMPANY } from '@/data/site';
 
 const SERVICE_LINKS: Array<{ label: string; href: string }> = [
@@ -44,6 +46,8 @@ export default function Footer({
   phone = COMPANY.phone,
 }: FooterProps) {
   const year = new Date().getFullYear();
+  const [activeLegalTab, setActiveLegalTab] = useState<LegalTab | null>(null);
+
   return (
     <footer className="ds-footer" role="contentinfo" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Footer</h2>
@@ -78,9 +82,9 @@ export default function Footer({
                   target={s.href.startsWith('http') ? '_blank' : undefined}
                   rel={s.href.startsWith('http') ? 'noopener noreferrer nofollow' : undefined}
                   aria-label={`${SOCIAL_LABEL_MAP[s.label]} (opens in a new tab)`}
-                  className="ds-icon ds-icon--dark !p-0 inline-flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:text-white"
+                  className="ds-icon ds-icon--dark !p-0 inline-flex items-center justify-center min-w-[44px] min-h-[44px] transition-all duration-200 hover:-translate-y-0.5 hover:text-white touch-manipulation"
                 >
-                  <Icon name={s.label} size={16} aria-hidden />
+                  <Icon name={s.label} size={18} aria-hidden />
                 </a>
               </li>
             ))}
@@ -143,28 +147,40 @@ export default function Footer({
         </section>
       </div>
 
-      {/* Statutory Corporate Identifiers Strip */}
-      <div className="ds-container pt-6 pb-4 border-t border-white/10 mt-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-white/50">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <span><strong className="text-white/70">CIN:</strong> {COMPANY.cin}</span>
-            <span><strong className="text-white/70">GSTIN:</strong> {COMPANY.gstin}</span>
-            <span className="hidden md:inline text-nova-400/70">Registered Enterprise · Pune, Maharashtra</span>
-          </div>
-          <div className="text-[0.7rem] uppercase tracking-wider text-white/40">
-            Ministry of Corporate Affairs · Govt of India
-          </div>
-        </div>
-      </div>
-
       <div className="ds-container ds-footer__bottom">
         <div>© {year} {COMPANY.name}. All rights reserved.</div>
-        <nav className="ds-footer__legal" aria-label="Legal information">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Cookie Policy</a>
+        <nav className="ds-footer__legal flex flex-wrap gap-4 text-xs" aria-label="Legal information">
+          <button
+            type="button"
+            onClick={() => setActiveLegalTab('privacy')}
+            className="hover:text-white transition-colors underline-offset-4 hover:underline touch-manipulation"
+          >
+            Privacy Policy
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLegalTab('terms')}
+            className="hover:text-white transition-colors underline-offset-4 hover:underline touch-manipulation"
+          >
+            Terms of Use
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLegalTab('cookies')}
+            className="hover:text-white transition-colors underline-offset-4 hover:underline touch-manipulation"
+          >
+            Cookie Policy
+          </button>
         </nav>
       </div>
+
+      {/* DPDP Act 2023 & Institutional Governance Modal */}
+      <LegalModal
+        isOpen={activeLegalTab !== null}
+        activeTab={activeLegalTab ?? 'privacy'}
+        onClose={() => setActiveLegalTab(null)}
+        onTabChange={(tab) => setActiveLegalTab(tab)}
+      />
     </footer>
   );
 }

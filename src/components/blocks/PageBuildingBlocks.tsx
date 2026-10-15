@@ -174,10 +174,12 @@ export function PageHero({
 /* ===========================================================
    BENEFITS GRID — 3/4 columns of icon + benefit pairs
    =========================================================== */
-export function BenefitGrid({ items }: { items: Array<{ icon: IconName; iconVariant?: 'nova' | 'forest' | 'gold' | 'outline' | 'dark'; title: string; description: string; eyebrow?: string }> }) {
+export function BenefitGrid({ items, eyebrowAlign = 'right' }: { items: Array<{ icon?: IconName; iconVariant?: 'nova' | 'forest' | 'gold' | 'outline' | 'dark'; title: string; description: string; eyebrow?: string }>; eyebrowAlign?: 'left' | 'right' }) {
   const variantClass = (v?: string) =>
     v === 'forest' ? 'ds-icon--forest' : v === 'gold' ? 'ds-icon--gold' : v === 'outline' ? 'ds-icon--outline' : v === 'dark' ? 'ds-icon--dark' : 'ds-icon--nova';
   const cols = items.length <= 3 ? 'lg:grid-cols-3' : items.length === 4 ? 'lg:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-3';
+  const headerJustify = eyebrowAlign === 'left' ? 'justify-start' : 'justify-between';
+  const eyebrowOrder = eyebrowAlign === 'left' ? 'order-none' : 'ml-auto';
   return (
     <div className={`grid grid-cols-1 ${cols} gap-6 lg:gap-8`}>
       {items.map((it) => (
@@ -186,16 +188,21 @@ export function BenefitGrid({ items }: { items: Array<{ icon: IconName; iconVari
           className="relative rounded-2xl border border-line bg-white p-7 transition-all duration-400 ease-corp hover:-translate-y-1 hover:shadow-lg hover:border-nova-400/30 flex flex-col justify-between"
         >
           <div>
-            <div className="flex items-center justify-between gap-3 mb-5">
-              <div className={`ds-icon ds-icon--lg ${variantClass(it.iconVariant)}`}>
-                <Icon name={it.icon} size={22} />
+            {(it.icon || it.eyebrow) && (
+              <div className={`flex items-center ${headerJustify} gap-3 mb-5`}>
+                {it.icon && (
+                  <div className={`ds-icon ds-icon--lg ${variantClass(it.iconVariant)}`}>
+                    <Icon name={it.icon} size={22} />
+                  </div>
+                )}
+                {!it.icon && eyebrowAlign === 'right' && <div />}
+                {it.eyebrow && (
+                  <span className={`text-[0.7rem] font-semibold uppercase tracking-wider text-forest-700 bg-forest-50/80 px-2.5 py-1 rounded-full border border-forest-200/50 ${eyebrowOrder}`}>
+                    {it.eyebrow}
+                  </span>
+                )}
               </div>
-              {it.eyebrow && (
-                <span className="text-[0.7rem] font-semibold uppercase tracking-wider text-forest-700 bg-forest-50/80 px-2.5 py-1 rounded-full border border-forest-200/50">
-                  {it.eyebrow}
-                </span>
-              )}
-            </div>
+            )}
             <h3 className="font-display text-[1.18rem] font-semibold tracking-tight leading-snug mb-3 text-ink">
               {it.title}
             </h3>
